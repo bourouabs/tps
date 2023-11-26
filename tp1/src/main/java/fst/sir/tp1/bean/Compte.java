@@ -1,14 +1,27 @@
 package fst.sir.tp1.bean;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Compte {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String rib;
     private double solde;
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    private boolean status;
 
     public String getRib() {
         return rib;

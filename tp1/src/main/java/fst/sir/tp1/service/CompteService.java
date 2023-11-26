@@ -2,9 +2,11 @@ package fst.sir.tp1.service;
 
 import fst.sir.tp1.bean.Compte;
 import fst.sir.tp1.dao.CompteDao;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,6 +40,29 @@ public class CompteService {
         }
     }
 
+    private int transferer(Compte source, Compte destination, double montant) {
+        if (source == null) {
+            return -1;
+        } else if (destination == null) return -2;
+        if (source.getSolde() < montant) {
+            return -3;
+        } else {
+            source.setSolde(source.getSolde() - montant);
+            destination.setSolde(destination.getSolde() + montant);
+            compteDao.save(source);
+            compteDao.save(destination);
+            return 1;
+        }
+    }
+
+    /*to get the compte using rib*/
+    public int transferer(String ribSource, String ribDestination, double montant) {
+        Compte cs = findByRib(ribSource);
+        Compte cd = findByRib(ribDestination);
+        return transferer(cs, cd, montant);
+
+    }
+
     public int save(Compte compte) {
         if (findByRib(compte.getRib()) != null) {
             return -1;
@@ -51,6 +76,7 @@ public class CompteService {
         return compteDao.findByRib(rib);
     }
 
+    @Transactional
     public int deleteByRib(String rib) {
         return compteDao.deleteByRib(rib);
     }

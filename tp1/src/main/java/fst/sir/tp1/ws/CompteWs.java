@@ -13,12 +13,18 @@ public class CompteWs {
     @Autowired
     private CompteService compteService;
 
-    public int crediter(String rib, double montant) {
+
+    @PutMapping("crediter/rib/{rib}/montant/{montant}")
+    public int crediter(@PathVariable String rib,@PathVariable double montant) {
         return compteService.crediter(rib, montant);
     }
-    @PutMapping("rib/{rib}/montant/{montant}")
+    @PutMapping("debiter/rib/{rib}/montant/{montant}")
     public int debiter(@PathVariable String rib, @PathVariable double montant) {
         return compteService.debiter(rib, montant);
+    }
+    @PutMapping("transfer/source/rib/{ribSource}/destination/rib/{ribDestination}/montant/{montant}")
+    public int transferer(@PathVariable String ribSource,@PathVariable String ribDestination, @PathVariable double montant) {
+        return compteService.transferer(ribSource,ribDestination, montant);
     }
 
     @PostMapping("")
